@@ -1,0 +1,28 @@
+#LEMP PLAYBOOK
+---
+- hosts: "all"
+  become: true
+  tasks:
+  - name: "Install nginx via pacman"
+    ansible.builtin.pacman:
+      name: "nginx"
+      state: "latest" 
+      update_cache: true
+  - name: "Start & Enable nginx"
+    ansible.builtin.systemd_service:
+      enabled: true
+      name: "nginx.service"
+      state: "started"
+#  - name: "Delete /var/www/html folder"
+#    ansible.builtin.file:
+#      path: "/var/www/html"
+#      state: "absent"
+  - name: "Copy our lend to /usr/share/nginx/html folder"
+    ansible.builtin.copy:
+      src: "../index.html"
+      dest: "/usr/share/nginx/html"
+      owner: "siderea"
+      group: "wheel"
+      mode: "0644"
+
+...
